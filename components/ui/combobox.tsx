@@ -4,9 +4,9 @@ import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Command,
+  CommandInput,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList
 } from '@/components/ui/command'
@@ -15,34 +15,15 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover'
+import { Tag } from '@/lib/drizzle'
 
-type Tag = {
-  value: string
-  label: string
-}
-
-const tags: Tag[] = [
-  {
-    value: 'array',
-    label: 'array'
-  },
-  {
-    value: 'string',
-    label: 'string'
-  },
-  {
-    value: 'dp',
-    label: 'dp'
-  },
-  {
-    value: 'graph',
-    label: 'graph'
-  }
-]
-
-export function ComboboxPopover() {
+export function TagComboboxPopover(props: {
+  tags: Tag[]
+  onSelect: (tagId: number) => void
+  addNewTag: (label: string) => void
+}) {
   const [open, setOpen] = React.useState(false)
-  const [selectedTag, setSelectedTag] = React.useState<Tag | null>(null)
+  const [value, setValue] = React.useState('')
 
   return (
     <div className="flex items-center space-x-4">
@@ -53,28 +34,40 @@ export function ComboboxPopover() {
             size="sm"
             className="h-10 w-60 justify-start"
           >
-            {selectedTag ? <>{selectedTag.label}</> : <>+ Tag</>}
+            + Tag
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" side="right" align="start">
           <Command>
-            <CommandInput placeholder="Add tag..." />
+            <CommandInput
+              value={value}
+              onValueChange={setValue}
+              placeholder="Add tag..."
+            />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>
+                {value ? (
+                  <span
+                    className="cursor-pointer"
+                    onClick={() => props.addNewTag(value)}
+                  >
+                    Add &quot;{value}&quot; to tags
+                  </span>
+                ) : (
+                  'No tags found'
+                )}
+              </CommandEmpty>
               <CommandGroup>
-                {tags.map((status) => (
+                {props.tags.map((tag) => (
                   <CommandItem
-                    key={status.value}
-                    value={status.value}
-                    onSelect={(value) => {
-                      setSelectedTag(
-                        tags.find((priority) => priority.value === value) ||
-                          null
-                      )
-                      setOpen(false)
+                    key={tag.id}
+                    value={tag.label}
+                    onSelect={() => {
+                      props.onSelect(tag.id)
+                      setValue('')
                     }}
                   >
-                    <span>{status.label}</span>
+                    <span>{tag.label}</span>
                   </CommandItem>
                 ))}
               </CommandGroup>
