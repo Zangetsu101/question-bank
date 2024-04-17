@@ -83,7 +83,7 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
         }
         await createNewQuestion(payload, selectedTags)
       }}
-      className="w-full max-w-3xl"
+      className="w-full"
     >
       <div className="flex flex-col gap-2">
         <div className="flex justify-between gap-4">

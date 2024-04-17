@@ -1,6 +1,10 @@
-import { db, questionsTable } from '@/lib/drizzle'
+import { db } from '@/lib/drizzle'
 
 export default async function Home() {
-  const questions = await db.select().from(questionsTable)
-  return <pre>{JSON.stringify(questions)}</pre>
+  const questions = await db.query.questions.findMany({
+    with: { questionTags: { columns: {}, with: { tag: true } } }
+  })
+  return questions.map((question) => (
+    <pre key={question.id}>{JSON.stringify(question)}</pre>
+  ))
 }
