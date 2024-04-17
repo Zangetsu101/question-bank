@@ -13,7 +13,7 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Tag, difficultyEnum } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
-import { createNewQuestion, createNewTag } from './actions'
+import { createNewQuestion, createNewTag } from '@/app/actions'
 
 function Tags(props: {
   selectedTags: number[]
