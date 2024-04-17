@@ -9,3 +9,4 @@ export const questionsTable = pgTable('questions', {
 })
 
 export type Question = typeof questionsTable.$inferSelect
+export type QuestionPayload = typeof questionsTable.$inferInsert

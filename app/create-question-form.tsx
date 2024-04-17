@@ -11,9 +11,9 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Tag } from '@/lib/drizzle'
+import { Tag, difficultyEnum } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
-import { createNewTag } from './actions'
+import { createNewQuestion, createNewTag } from './actions'
 
 function Tags(props: {
   selectedTags: number[]
@@ -66,22 +66,42 @@ function Tags(props: {
   )
 }
 
+type Difficulty = (typeof difficultyEnum.enumValues)[number]
+
 export function CreateQuestionForm(props: { tags: Tag[] }) {
   const [selectedTags, setSelectedTags] = React.useState<number[]>([])
+  const [difficulty, setDifficulty] = React.useState<Difficulty>(
+    difficultyEnum.enumValues[0]
+  )
+  const questionRef = React.useRef<HTMLTextAreaElement>(null)
   return (
-    <form className="w-full max-w-3xl">
+    <form
+      action={async () => {
+        const payload = {
+          difficulty,
+          questionMd: questionRef.current?.value ?? ''
+        }
+        await createNewQuestion(payload, selectedTags)
+      }}
+      className="w-full max-w-3xl"
+    >
       <div className="flex flex-col gap-2">
         <div className="flex justify-between gap-4">
           <div className="flex flex-col gap-2">
             <Label htmlFor="difficulty">Difficulty: </Label>
-            <Select defaultValue="easy">
+            <Select
+              value={difficulty}
+              onValueChange={(v: Difficulty) => setDifficulty(v)}
+            >
               <SelectTrigger id="difficulty" className="w-60">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="easy">Easy</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="hard">Hard</SelectItem>
+                {difficultyEnum.enumValues.map((level) => (
+                  <SelectItem key={level} value={level}>
+                    {`${level[0].toUpperCase()}${level.substring(1)}`}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -104,7 +124,11 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="question">Question: </Label>
-          <Textarea id="question" className="min-h-[700px] resize-none" />
+          <Textarea
+            ref={questionRef}
+            id="question"
+            className="min-h-[700px] resize-none"
+          />
         </div>
         <Button className="self-start" type="submit">
           Submit
