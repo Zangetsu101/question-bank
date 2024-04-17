@@ -11,7 +11,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Tag, difficultyEnum } from '@/lib/drizzle'
+import { Difficulty, Tag, difficultyEnum } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
 import { createNewQuestion, createNewTag } from '@/app/actions'
 
@@ -66,8 +66,6 @@ function Tags(props: {
   )
 }
 
-type Difficulty = (typeof difficultyEnum.enumValues)[number]
-
 export function CreateQuestionForm(props: { tags: Tag[] }) {
   const [selectedTags, setSelectedTags] = React.useState<number[]>([])
   const [difficulty, setDifficulty] = React.useState<Difficulty>(
@@ -79,9 +77,12 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
       action={async () => {
         const payload = {
           difficulty,
-          questionMd: questionRef.current?.value ?? ''
+          questionMd: questionRef.current?.value ?? '',
+          tags: selectedTags.map(
+            (tagId) => props.tags.find((tag) => tag.id === tagId)!.label
+          )
         }
-        await createNewQuestion(payload, selectedTags)
+        await createNewQuestion(payload)
       }}
       className="w-full"
     >
