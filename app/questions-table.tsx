@@ -41,7 +41,9 @@ export function QuestionsTable<TData, TValue>({
   data,
   tags
 }: QuestionsTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([
+    { id: 'difficulty', desc: false }
+  ])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -71,25 +73,23 @@ export function QuestionsTable<TData, TValue>({
           <DropdownMenuContent align="end">
             {tags.map((tag) => {
               const tagsFilter = (columnFilters.find((f) => f.id === 'tags')
-                ?.value ?? []) as string[]
+                ?.value ?? []) as number[]
               return (
                 <DropdownMenuCheckboxItem
                   key={tag.id}
                   className="capitalize"
-                  checked={tagsFilter.includes(tag.label)}
+                  checked={tagsFilter.includes(tag.id)}
                   onCheckedChange={(value) =>
                     value
                       ? setColumnFilters([
                           ...columnFilters.filter((f) => f.id !== 'tags'),
-                          { id: 'tags', value: [...tagsFilter, tag.label] }
+                          { id: 'tags', value: [...tagsFilter, tag.id] }
                         ])
                       : setColumnFilters([
                           ...columnFilters.filter((f) => f.id !== 'tags'),
                           {
                             id: 'tags',
-                            value: tagsFilter.filter(
-                              (label) => label !== tag.label
-                            )
+                            value: tagsFilter.filter((id) => id !== tag.id)
                           }
                         ])
                   }

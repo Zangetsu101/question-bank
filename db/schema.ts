@@ -1,12 +1,13 @@
-import { serial, text, pgTable, pgEnum } from 'drizzle-orm/pg-core'
+import { serial, text, pgTable, pgEnum, integer } from 'drizzle-orm/pg-core'
 
 export const difficultyEnum = pgEnum('difficulty', ['easy', 'medium', 'hard'])
 
 export const questions = pgTable('questions', {
   id: serial('serial').primaryKey(),
+  title: text('title').notNull(),
   difficulty: difficultyEnum('difficulty').notNull(),
   questionMd: text('question_md').notNull(),
-  tags: text('tags').array()
+  tagIds: integer('tag_ids').array()
 })
 
 export const tags = pgTable('tags', {
@@ -16,5 +17,7 @@ export const tags = pgTable('tags', {
 
 export type Tag = typeof tags.$inferSelect
 export type Difficulty = (typeof difficultyEnum.enumValues)[number]
-export type Question = typeof questions.$inferSelect
+export type QuestionWithTags = Omit<typeof questions.$inferSelect, 'tagIds'> & {
+  tags: Tag[]
+}
 export type QuestionPayload = typeof questions.$inferInsert

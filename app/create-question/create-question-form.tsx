@@ -11,9 +11,10 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import { Difficulty, Tag, difficultyEnum } from '@/lib/drizzle'
+import { Difficulty, QuestionPayload, Tag, difficultyEnum } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
 import { createNewQuestion, createNewTag } from '@/app/actions'
+import { Input } from '@/components/ui/input'
 
 function Tags(props: {
   selectedTags: number[]
@@ -72,16 +73,16 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
     difficultyEnum.enumValues[0]
   )
   const questionRef = React.useRef<HTMLTextAreaElement>(null)
+  const titleRef = React.useRef<HTMLInputElement>(null)
   return (
     <form
       action={async () => {
         const payload = {
           difficulty,
+          title: titleRef.current?.value ?? '',
           questionMd: questionRef.current?.value ?? '',
-          tags: selectedTags.map(
-            (tagId) => props.tags.find((tag) => tag.id === tagId)!.label
-          )
-        }
+          tagIds: selectedTags
+        } satisfies QuestionPayload
         await createNewQuestion(payload)
       }}
       className="w-full"
@@ -124,11 +125,15 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
           </div>
         </div>
         <div className="flex flex-col gap-2">
+          <Label htmlFor="title">Title: </Label>
+          <Input ref={titleRef} id="title" />
+        </div>
+        <div className="flex flex-col gap-2">
           <Label htmlFor="question">Question: </Label>
           <Textarea
             ref={questionRef}
             id="question"
-            className="min-h-[700px] resize-none"
+            className="min-h-[600px] resize-none"
           />
         </div>
         <Button className="self-start" type="submit">

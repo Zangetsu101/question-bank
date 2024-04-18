@@ -2,11 +2,15 @@
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Question, difficultyEnum } from '@/db/schema'
+import { QuestionWithTags, difficultyEnum } from '@/db/schema'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
 
-export const columns: ColumnDef<Question>[] = [
+export const columns: ColumnDef<QuestionWithTags>[] = [
+  {
+    accessorKey: 'title',
+    header: 'Title'
+  },
   {
     accessorKey: 'difficulty',
     sortingFn: (a, b) =>
@@ -30,9 +34,11 @@ export const columns: ColumnDef<Question>[] = [
   {
     accessorKey: 'tags',
     header: 'Tags',
-    filterFn: (row, _, filterValue) => {
+    filterFn: (row, _, filterValue: number[]) => {
       return (
-        row.original.tags?.some((tag) => filterValue.includes(tag)) ?? false
+        (filterValue.length === 0 ||
+          row.original.tags?.some((tag) => filterValue.includes(tag.id))) ??
+        false
       )
     },
     cell: ({ row }) => {
@@ -40,14 +46,10 @@ export const columns: ColumnDef<Question>[] = [
       return (
         <div className="flex gap-2">
           {tags.map((tag) => (
-            <Badge key={tag}>{tag}</Badge>
+            <Badge key={tag.id}>{tag.label}</Badge>
           ))}
         </div>
       )
     }
-  },
-  {
-    accessorKey: 'questionMd',
-    header: 'Question'
   }
 ]
