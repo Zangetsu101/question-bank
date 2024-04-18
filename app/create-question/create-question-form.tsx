@@ -15,6 +15,8 @@ import { Difficulty, QuestionPayload, Tag, difficultyEnum } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
 import { createNewQuestion, createNewTag } from '@/app/actions'
 import { Input } from '@/components/ui/input'
+import { Loader2 } from 'lucide-react'
+import { useFormStatus } from 'react-dom'
 
 function Tags(props: {
   selectedTags: number[]
@@ -64,6 +66,16 @@ function Tags(props: {
         addNewTag={handleNewTag}
       />
     </div>
+  )
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus()
+  return (
+    <Button className="self-start" type="submit" disabled={pending}>
+      {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+      Submit
+    </Button>
   )
 }
 
@@ -136,9 +148,7 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
             className="min-h-[600px] resize-none"
           />
         </div>
-        <Button className="self-start" type="submit">
-          Submit
-        </Button>
+        <SubmitButton />
       </div>
     </form>
   )
