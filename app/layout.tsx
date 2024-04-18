@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <main className="flex min-h-screen flex-col">
           <Navigation />
-          <div className="w-full max-w-4xl flex-1 self-center border-x border-gray-300 py-12">
+          <div className="w-full max-w-4xl flex-1 self-center py-12">
             {children}
           </div>
         </main>

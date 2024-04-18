@@ -16,4 +16,5 @@ export const tags = pgTable('tags', {
 
 export type Tag = typeof tags.$inferSelect
 export type Difficulty = (typeof difficultyEnum.enumValues)[number]
+export type Question = typeof questions.$inferSelect
 export type QuestionPayload = typeof questions.$inferInsert
