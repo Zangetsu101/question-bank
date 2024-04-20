@@ -2,7 +2,7 @@ import { QuestionWithTags, db } from '@/lib/drizzle'
 import { columns } from './_components/columns'
 import { QuestionsTable } from './_components/questions-table'
 
-export default async function Home() {
+export default async function Page() {
   const [questions, tags] = await Promise.all([
     db.query.questions.findMany({
       where: (model, { eq }) => eq(model.status, 'in-review')
