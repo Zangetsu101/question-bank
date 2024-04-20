@@ -6,25 +6,24 @@ import React from 'react'
 
 export function Navigation() {
   const pathname = usePathname()
+  const getClasses = (path: string) =>
+    cn(
+      'text-sm font-medium transition-colors hover:text-primary',
+      pathname !== path && 'text-muted-foreground'
+    )
   return (
     <nav className="flex h-10 items-center border-y border-gray-300 px-64 lg:space-x-6">
-      <Link
-        className={cn(
-          'text-sm font-medium transition-colors hover:text-primary',
-          pathname !== '/' && 'text-muted-foreground'
-        )}
-        href="/"
-      >
-        My Questions
+      <Link className={getClasses('/')} href="/">
+        My questions
+      </Link>
+      <Link className={getClasses('/create-question')} href="/create-question">
+        Create question
       </Link>
       <Link
-        className={cn(
-          'text-sm font-medium transition-colors hover:text-primary',
-          pathname !== '/create-question' && 'text-muted-foreground'
-        )}
-        href="/create-question"
+        className={getClasses('/review-questions')}
+        href="/review-questions"
       >
-        Create Question
+        Review questions
       </Link>
     </nav>
   )

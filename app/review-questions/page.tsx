@@ -4,7 +4,9 @@ import { QuestionsTable } from './_components/questions-table'
 
 export default async function Home() {
   const [questions, tags] = await Promise.all([
-    db.query.questions.findMany(),
+    db.query.questions.findMany({
+      where: (model, { eq }) => eq(model.status, 'in-review')
+    }),
     db.query.tags.findMany()
   ])
   const questionsWithTags: QuestionWithTags[] = questions.map(
