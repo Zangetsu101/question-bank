@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { QuestionWithTags, difficultyEnum } from '@/db/schema'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+import { StatusBadge } from './status-badge'
 
 export const columns: ColumnDef<QuestionWithTags>[] = [
   {
@@ -20,6 +21,7 @@ export const columns: ColumnDef<QuestionWithTags>[] = [
       return (
         <Button
           variant="ghost"
+          className="pl-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Difficulty
@@ -30,6 +32,14 @@ export const columns: ColumnDef<QuestionWithTags>[] = [
     cell: ({ row }) => (
       <span className="capitalize">{row.original.difficulty}</span>
     )
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }) => {
+      const status = row.original.status
+      return <StatusBadge status={status} />
+    }
   },
   {
     accessorKey: 'tags',

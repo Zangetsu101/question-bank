@@ -1,6 +1,6 @@
 import { QuestionWithTags, db } from '@/lib/drizzle'
-import { columns } from './columns'
-import { QuestionsTable } from './questions-table'
+import { columns } from './_components/columns'
+import { QuestionsTable } from './_components/questions-table'
 
 export default async function Home() {
   const questions = await db.query.questions.findMany()

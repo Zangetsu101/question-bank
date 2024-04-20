@@ -93,6 +93,7 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
           difficulty,
           title: titleRef.current?.value ?? '',
           questionMd: questionRef.current?.value ?? '',
+          status: 'in-review',
           tagIds: selectedTags
         } satisfies QuestionPayload
         await createNewQuestion(payload)
