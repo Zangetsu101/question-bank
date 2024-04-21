@@ -1,7 +1,6 @@
 'use client'
 
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   flexRender,
@@ -28,27 +27,25 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { Tag } from '@/db/schema'
+import { QuestionWithTags, Tag } from '@/db/schema'
+import { columns } from './columns'
+import { useRouter } from 'next/navigation'
 
-interface QuestionsTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+interface QuestionsTableProps {
+  questions: QuestionWithTags[]
   tags: Tag[]
 }
 
-export function QuestionsTable<TData, TValue>({
-  columns,
-  data,
-  tags
-}: QuestionsTableProps<TData, TValue>) {
+export function QuestionsTable({ questions, tags }: QuestionsTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'difficulty', desc: false }
   ])
+  const router = useRouter()
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const table = useReactTable({
-    data,
+    data: questions,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
@@ -127,6 +124,10 @@ export function QuestionsTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className="cursor-pointer"
+                  onClick={() =>
+                    router.push(`review-questions/${row.original.id}`)
+                  }
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
