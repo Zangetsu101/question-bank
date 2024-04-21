@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import { QuestionWithTags, difficultyEnum } from '@/db/schema'
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
-import { StatusBadge } from './status-badge'
 
 export const columns: ColumnDef<QuestionWithTags>[] = [
   {
