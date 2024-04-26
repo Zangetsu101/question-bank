@@ -1,6 +1,8 @@
 import { QuestionWithTags, db } from '@/lib/drizzle'
 import { QuestionsTable } from './_components/questions-table'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Page() {
   const [questions, tags] = await Promise.all([
     db.query.questions.findMany({
