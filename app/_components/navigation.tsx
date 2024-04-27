@@ -14,7 +14,7 @@ export function Navigation() {
     )
   return (
     <div className="border-b py-1">
-      <div className="mx-auto flex max-w-4xl items-center justify-between">
+      <div className="mx-auto flex max-w-6xl items-center justify-between">
         <nav className="flex gap-2">
           <Link className={getClasses('/')} href="/">
             My questions
