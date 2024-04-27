@@ -1,8 +1,10 @@
 'use server'
 
 import {
+  ApprovalPayload,
   CommentPayload,
   QuestionPayload,
+  approvals,
   comments,
   db,
   questionHistories,
@@ -41,4 +43,8 @@ export async function updateQuestion({
 
 export async function addComment(payload: CommentPayload) {
   await db.insert(comments).values(payload)
+}
+
+export async function addApproval(payload: ApprovalPayload) {
+  await db.insert(approvals).values(payload)
 }

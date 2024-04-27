@@ -93,6 +93,7 @@ export type Question = typeof questions.$inferSelect
 export type Comment = typeof comments.$inferSelect
 export type CommentPayload = typeof comments.$inferInsert
 export type Approval = typeof approvals.$inferSelect
+export type ApprovalPayload = typeof approvals.$inferInsert
 export type QuestionWithTags = Omit<typeof questions.$inferSelect, 'tagIds'> & {
   tags: Tag[]
 }

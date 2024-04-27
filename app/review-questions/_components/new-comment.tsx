@@ -24,11 +24,15 @@ export function NewComment(props: { questionId: number }) {
   return (
     <form
       action={async () => {
+        if (!commentRef.current) {
+          return
+        }
         await addComment({
           questionId: props.questionId,
-          text: commentRef.current?.value ?? ''
+          text: commentRef.current.value
         })
         router.refresh()
+        commentRef.current.value = ''
       }}
       className="w-full"
     >

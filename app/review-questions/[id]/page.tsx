@@ -6,6 +6,7 @@ import type { Timeline } from '@/db/queries'
 import { getQuestionTimeline } from '@/db/queries'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { NewComment } from '../_components/new-comment'
+import { AddApproval } from '../_components/add-approval'
 
 export const dynamic = 'force-dynamic'
 
@@ -50,24 +51,35 @@ function isComment(commentOrApproval: Timeline): commentOrApproval is Comment {
   return 'text' in commentOrApproval
 }
 
+const durationFormatter = new Intl.DateTimeFormat('en-US', {
+  dateStyle: 'long',
+  timeStyle: 'short'
+})
+
 function Comment(props: { comment: Comment }) {
   return (
-    <div className="flex items-center gap-2">
-      <Avatar>
+    <div className="flex items-center gap-2 text-sm">
+      <Avatar className="h-8 w-8">
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
-      {props.comment.text}
+      <span className="flex-grow">{props.comment.text}</span>
+      <span className="text-[.7rem] text-muted-foreground">
+        {durationFormatter.format(props.comment.createdAt)}
+      </span>
     </div>
   )
 }
 
-function Approval(_props: { approval: Approval }) {
+function Approval(props: { approval: Approval }) {
   return (
-    <div className="flex">
-      <Avatar>
+    <div className="flex items-center gap-2 text-sm">
+      <Avatar className="h-8 w-8">
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
-      User approved these changes
+      <span className="flex-grow">Approved these changes</span>
+      <span className="text-[.7rem] text-muted-foreground">
+        {durationFormatter.format(props.approval.createdAt)}
+      </span>
     </div>
   )
 }
@@ -87,6 +99,9 @@ export default async function Page({ params }: { params: { id: string } }) {
   const questionId = Number(params.id)
   return (
     <div className="flex flex-col gap-4">
+      <div className="flex justify-end">
+        <AddApproval questionId={questionId} />
+      </div>
       <Question questionId={questionId} />
       <Suspense fallback={'Loading timeline'}>
         <Timeline questionId={questionId} />
