@@ -13,25 +13,27 @@ export function Navigation() {
       pathname !== path && 'text-muted-foreground'
     )
   return (
-    <div className="flex items-center justify-between border-b px-64 py-1">
-      <nav className="flex gap-2">
-        <Link className={getClasses('/')} href="/">
-          My questions
-        </Link>
-        <Link
-          className={getClasses('/create-question')}
-          href="/create-question"
-        >
-          Create question
-        </Link>
-        <Link
-          className={getClasses('/review-questions')}
-          href="/review-questions"
-        >
-          Review questions
-        </Link>
-      </nav>
-      <ModeToggle />
+    <div className="border-b py-1">
+      <div className="mx-auto flex max-w-4xl items-center justify-between">
+        <nav className="flex gap-2">
+          <Link className={getClasses('/')} href="/">
+            My questions
+          </Link>
+          <Link
+            className={getClasses('/create-question')}
+            href="/create-question"
+          >
+            Create question
+          </Link>
+          <Link
+            className={getClasses('/review-questions')}
+            href="/review-questions"
+          >
+            Review questions
+          </Link>
+        </nav>
+        <ModeToggle />
+      </div>
     </div>
   )
 }
