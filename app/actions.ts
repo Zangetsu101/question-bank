@@ -1,7 +1,9 @@
 'use server'
 
 import {
+  CommentPayload,
   QuestionPayload,
+  comments,
   db,
   questionHistories,
   questions,
@@ -35,4 +37,8 @@ export async function updateQuestion({
     .insert(questionHistories)
     .values({ questionId: id, createdAt: updatedAt, ...questionDetails })
   await db.update(questions).set(payload).where(eq(questions.id, id))
+}
+
+export async function addComment(payload: CommentPayload) {
+  await db.insert(comments).values(payload)
 }

@@ -1,5 +1,11 @@
+import type { Approval, Comment } from '@/lib/drizzle'
 import { db } from '@/lib/drizzle'
 import { Badge } from '@/components/ui/badge'
+import { Suspense } from 'react'
+import type { Timeline } from '@/db/queries'
+import { getQuestionTimeline } from '@/db/queries'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { NewComment } from '../_components/new-comment'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,6 +46,52 @@ async function Question(props: { questionId: number }) {
   )
 }
 
+function isComment(commentOrApproval: Timeline): commentOrApproval is Comment {
+  return 'text' in commentOrApproval
+}
+
+function Comment(props: { comment: Comment }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Avatar>
+        <AvatarFallback>U</AvatarFallback>
+      </Avatar>
+      {props.comment.text}
+    </div>
+  )
+}
+
+function Approval(_props: { approval: Approval }) {
+  return (
+    <div className="flex">
+      <Avatar>
+        <AvatarFallback>U</AvatarFallback>
+      </Avatar>
+      User approved these changes
+    </div>
+  )
+}
+
+async function Timeline(props: { questionId: number }) {
+  const timeline = await getQuestionTimeline(props.questionId)
+  return timeline.map((commentOrApproval, index) =>
+    isComment(commentOrApproval) ? (
+      <Comment key={index} comment={commentOrApproval} />
+    ) : (
+      <Approval key={index} approval={commentOrApproval} />
+    )
+  )
+}
+
 export default async function Page({ params }: { params: { id: string } }) {
-  return <Question questionId={Number(params.id)} />
+  const questionId = Number(params.id)
+  return (
+    <div className="flex flex-col gap-4">
+      <Question questionId={questionId} />
+      <Suspense fallback={'Loading timeline'}>
+        <Timeline questionId={questionId} />
+        <NewComment questionId={questionId} />
+      </Suspense>
+    </div>
+  )
 }

@@ -91,6 +91,7 @@ export type Difficulty = (typeof difficultyEnum.enumValues)[number]
 export type Status = (typeof statusEnum.enumValues)[number]
 export type Question = typeof questions.$inferSelect
 export type Comment = typeof comments.$inferSelect
+export type CommentPayload = typeof comments.$inferInsert
 export type Approval = typeof approvals.$inferSelect
 export type QuestionWithTags = Omit<typeof questions.$inferSelect, 'tagIds'> & {
   tags: Tag[]
