@@ -9,7 +9,7 @@ function ApproveButton() {
   const { pending } = useFormStatus()
   return (
     <Button
-      className="bg-green-700 text-foreground hover:bg-green-700/80"
+      className="bg-green-700 text-white hover:bg-green-700/80"
       type="submit"
       disabled={pending}
     >
