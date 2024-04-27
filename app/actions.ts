@@ -3,6 +3,7 @@
 import {
   ApprovalPayload,
   CommentPayload,
+  Difficulty,
   QuestionPayload,
   approvals,
   comments,
@@ -13,6 +14,12 @@ import {
 } from '@/lib/drizzle'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
+
+const APPROVALS_REQUIRED: Record<Difficulty, number> = {
+  easy: 1,
+  medium: 1,
+  hard: 2
+}
 
 export async function createNewTag(label: string) {
   const newTag = await db.insert(tags).values({ label }).returning()
@@ -47,4 +54,27 @@ export async function addComment(payload: CommentPayload) {
 
 export async function addApproval(payload: ApprovalPayload) {
   await db.insert(approvals).values(payload)
+  const question = await db.query.questions.findFirst({
+    where: (model, { eq }) => eq(model.id, payload.questionId),
+    with: { approvals: true }
+  })
+  if (!question) {
+    throw new Error('No question found with given id')
+  }
+  const {
+    id,
+    approvals: questionApprovals,
+    updatedAt,
+    ...questionDetails
+  } = question
+  if (questionApprovals.length >= APPROVALS_REQUIRED[question.difficulty]) {
+    await db
+      .insert(questionHistories)
+      .values({ questionId: id, createdAt: updatedAt, ...questionDetails })
+    await db
+      .update(questions)
+      .set({ ...questionDetails, status: 'accepted' })
+      .where(eq(questions.id, id))
+    redirect('/review-questions')
+  }
 }
