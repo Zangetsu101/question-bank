@@ -13,7 +13,7 @@ export function Navigation() {
       pathname !== path && 'text-muted-foreground'
     )
   return (
-    <div className="border-b py-1">
+    <div className="border-b px-2 py-1">
       <div className="mx-auto flex max-w-6xl items-center justify-between">
         <nav className="flex gap-2">
           <Link className={getClasses('/')} href="/">

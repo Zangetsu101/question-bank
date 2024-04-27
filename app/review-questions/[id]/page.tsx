@@ -77,7 +77,7 @@ function Approval(props: { approval: Approval }) {
       <Avatar className="h-8 w-8">
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
-      <span className="flex flex-grow gap-2">
+      <span className="flex flex-grow items-center gap-2">
         Approved these changes <CircleCheckBig stroke="#15803d" />
       </span>
       <span className="flex-shrink-0 text-[.7rem] text-muted-foreground">
