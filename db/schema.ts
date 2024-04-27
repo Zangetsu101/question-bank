@@ -24,7 +24,9 @@ export const questions = pgTable('questions', {
 })
 
 export const questionsRelations = relations(questions, ({ many }) => ({
-  editHistories: many(questionHistories)
+  editHistories: many(questionHistories),
+  comments: many(comments),
+  approvals: many(approvals)
 }))
 
 export const tags = pgTable('tags', {
