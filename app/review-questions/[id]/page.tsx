@@ -3,25 +3,26 @@ import { Badge } from '@/components/ui/badge'
 
 export const dynamic = 'force-dynamic'
 
-export default async function Page({ params }: { params: { id: string } }) {
+async function Question(props: { questionId: number }) {
   const [question, tags] = await Promise.all([
     db.query.questions.findFirst({
-      where: (model, { eq }) => eq(model.id, Number(params.id))
+      where: (model, { eq }) => eq(model.id, Number(props.questionId))
     }),
     db.query.tags.findMany()
   ])
   if (!question) {
-    throw new Error(`No question found with the given id: ${params.id}`)
+    throw new Error(`No question found with the given id: ${props.questionId}`)
   }
   return (
     <div className="flex flex-col gap-8 rounded-lg bg-secondary p-4">
       <div className="flex justify-between">
         <div>
-          Difficulty: <span className="capitalize">{question.difficulty}</span>
+          <b>Difficulty: </b>
+          <span className="capitalize">{question.difficulty}</span>
         </div>
         {question.tagIds && (
           <div>
-            Tags:
+            <b>Tags: </b>
             <div className="inline-flex gap-1 pl-1">
               {question.tagIds
                 .map((id) => tags.find((tag) => tag.id === id)!)
@@ -37,4 +38,8 @@ export default async function Page({ params }: { params: { id: string } }) {
       </div>
     </div>
   )
+}
+
+export default async function Page({ params }: { params: { id: string } }) {
+  return <Question questionId={Number(params.id)} />
 }

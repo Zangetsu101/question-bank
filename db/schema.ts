@@ -55,10 +55,43 @@ export const questionHistoriesRelations = relations(
   })
 )
 
+export const comments = pgTable('comments', {
+  id: serial('serial').primaryKey(),
+  questionId: integer('question_id')
+    .notNull()
+    .references(() => questions.id),
+  text: text('text').notNull(),
+  createdAt: timestamp('created_at').notNull().defaultNow()
+})
+
+export const commentsRelations = relations(comments, ({ one }) => ({
+  question: one(questions, {
+    fields: [comments.questionId],
+    references: [questions.id]
+  })
+}))
+
+export const approvals = pgTable('approvals', {
+  id: serial('serial').primaryKey(),
+  questionId: integer('question_id')
+    .notNull()
+    .references(() => questions.id),
+  createdAt: timestamp('created_at').notNull().defaultNow()
+})
+
+export const approvalsRelations = relations(approvals, ({ one }) => ({
+  question: one(questions, {
+    fields: [approvals.questionId],
+    references: [questions.id]
+  })
+}))
+
 export type Tag = typeof tags.$inferSelect
 export type Difficulty = (typeof difficultyEnum.enumValues)[number]
 export type Status = (typeof statusEnum.enumValues)[number]
 export type Question = typeof questions.$inferSelect
+export type Comment = typeof comments.$inferSelect
+export type Approval = typeof approvals.$inferSelect
 export type QuestionWithTags = Omit<typeof questions.$inferSelect, 'tagIds'> & {
   tags: Tag[]
 }
