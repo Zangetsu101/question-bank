@@ -7,6 +7,7 @@ import { getQuestionTimeline } from '@/db/queries'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { NewComment } from '../_components/new-comment'
 import { AddApproval } from '../_components/add-approval'
+import { CircleCheckBig } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -76,7 +77,9 @@ function Approval(props: { approval: Approval }) {
       <Avatar className="h-8 w-8">
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
-      <span className="flex-grow">Approved these changes</span>
+      <span className="flex flex-grow gap-2">
+        Approved these changes <CircleCheckBig stroke="#15803d" />
+      </span>
       <span className="text-[.7rem] text-muted-foreground">
         {durationFormatter.format(props.approval.createdAt)}
       </span>
@@ -86,12 +89,16 @@ function Approval(props: { approval: Approval }) {
 
 async function Timeline(props: { questionId: number }) {
   const timeline = await getQuestionTimeline(props.questionId)
-  return timeline.map((commentOrApproval, index) =>
-    isComment(commentOrApproval) ? (
-      <Comment key={index} comment={commentOrApproval} />
-    ) : (
-      <Approval key={index} approval={commentOrApproval} />
-    )
+  return (
+    <div className="flex flex-col gap-2 py-4">
+      {timeline.map((commentOrApproval, index) =>
+        isComment(commentOrApproval) ? (
+          <Comment key={index} comment={commentOrApproval} />
+        ) : (
+          <Approval key={index} approval={commentOrApproval} />
+        )
+      )}
+    </div>
   )
 }
 
