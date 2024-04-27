@@ -31,6 +31,9 @@ export function Navigation() {
           >
             Review questions
           </Link>
+          <Link className={getClasses('/question-bank')} href="/question-bank">
+            Question bank
+          </Link>
         </nav>
         <ModeToggle />
       </div>
