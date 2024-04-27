@@ -64,7 +64,7 @@ function Comment(props: { comment: Comment }) {
         <AvatarFallback>U</AvatarFallback>
       </Avatar>
       <span className="flex-grow">{props.comment.text}</span>
-      <span className="text-[.7rem] text-muted-foreground">
+      <span className="flex-shrink-0 text-[.7rem] text-muted-foreground">
         {durationFormatter.format(props.comment.createdAt)}
       </span>
     </div>
@@ -80,7 +80,7 @@ function Approval(props: { approval: Approval }) {
       <span className="flex flex-grow gap-2">
         Approved these changes <CircleCheckBig stroke="#15803d" />
       </span>
-      <span className="text-[.7rem] text-muted-foreground">
+      <span className="flex-shrink-0 text-[.7rem] text-muted-foreground">
         {durationFormatter.format(props.approval.createdAt)}
       </span>
     </div>
