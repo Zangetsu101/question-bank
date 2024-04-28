@@ -11,15 +11,9 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  Difficulty,
-  QuestionPayload,
-  Question,
-  Tag,
-  difficultyEnum
-} from '@/lib/drizzle'
+import { Difficulty, Question, Tag, difficultyEnum } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
-import { updateQuestion, createNewTag } from '@/db/mutations'
+import { editQuestion, createNewTag } from '@/db/mutations'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
@@ -120,15 +114,14 @@ export function EditQuestionForm(props: { question: Question; tags: Tag[] }) {
   return (
     <form
       action={async () => {
-        const payload = {
+        await editQuestion({
           id: props.question.id,
           difficulty,
           title,
           questionMd,
-          status: 'in-review',
+          status: props.question.status,
           tagIds: selectedTags
-        } satisfies QuestionPayload
-        await updateQuestion(payload)
+        })
         router.refresh()
       }}
       className="w-full"

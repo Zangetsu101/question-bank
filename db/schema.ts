@@ -17,14 +17,15 @@ export const questions = pgTable('questions', {
   difficulty: difficultyEnum('difficulty').notNull(),
   status: statusEnum('status').notNull(),
   questionMd: text('question_md').notNull(),
-  tagIds: integer('tag_ids').array(),
+  tagIds: integer('tag_ids').array().notNull().default([]),
   updatedAt: timestamp('updated_at')
+    .notNull()
     .defaultNow()
     .$onUpdate(() => new Date())
 })
 
 export const questionsRelations = relations(questions, ({ many }) => ({
-  editHistories: many(questionHistories),
+  editHistories: many(questionEdits),
   comments: many(comments),
   approvals: many(approvals)
 }))
@@ -34,7 +35,7 @@ export const tags = pgTable('tags', {
   label: text('label').notNull()
 })
 
-export const questionHistories = pgTable('question_histories', {
+export const questionEdits = pgTable('question_edits', {
   id: serial('serial').primaryKey(),
   questionId: integer('question_id')
     .notNull()
@@ -44,18 +45,15 @@ export const questionHistories = pgTable('question_histories', {
   status: statusEnum('status'),
   questionMd: text('question_md'),
   tagIds: integer('tag_ids').array(),
-  createdAt: timestamp('created_at').defaultNow()
+  updatedAt: timestamp('updated_at')
 })
 
-export const questionHistoriesRelations = relations(
-  questionHistories,
-  ({ one }) => ({
-    question: one(questions, {
-      fields: [questionHistories.questionId],
-      references: [questions.id]
-    })
+export const questionEditsRelations = relations(questionEdits, ({ one }) => ({
+  question: one(questions, {
+    fields: [questionEdits.questionId],
+    references: [questions.id]
   })
-)
+}))
 
 export const comments = pgTable('comments', {
   id: serial('serial').primaryKey(),
@@ -93,6 +91,7 @@ export type TagPayload = typeof tags.$inferInsert
 export type Difficulty = (typeof difficultyEnum.enumValues)[number]
 export type Status = (typeof statusEnum.enumValues)[number]
 export type Question = typeof questions.$inferSelect
+export type QuestionPayload = typeof questions.$inferInsert
 export type Comment = typeof comments.$inferSelect
 export type CommentPayload = typeof comments.$inferInsert
 export type Approval = typeof approvals.$inferSelect
@@ -100,4 +99,3 @@ export type ApprovalPayload = typeof approvals.$inferInsert
 export type QuestionWithTags = Omit<typeof questions.$inferSelect, 'tagIds'> & {
   tags: Tag[]
 }
-export type QuestionPayload = typeof questions.$inferInsert
