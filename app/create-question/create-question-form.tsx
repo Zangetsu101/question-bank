@@ -17,6 +17,7 @@ import { createNewQuestion, createNewTag } from '@/db/mutations'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
+import { RedirectType, redirect } from 'next/navigation'
 
 function Tags(props: {
   selectedTags: number[]
@@ -86,6 +87,15 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
   )
   const questionRef = React.useRef<HTMLTextAreaElement>(null)
   const titleRef = React.useRef<HTMLInputElement>(null)
+
+  async function createNewQuestionAction(
+    payload: Parameters<typeof createNewQuestion>[0]
+  ) {
+    'use server'
+    await createNewQuestion(payload)
+    redirect('/', RedirectType.replace)
+  }
+
   return (
     <form
       action={async () => {
@@ -96,7 +106,7 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
           status: 'in-review',
           tagIds: selectedTags
         } satisfies QuestionPayload
-        await createNewQuestion(payload)
+        await createNewQuestionAction(payload)
       }}
       className="w-full"
     >

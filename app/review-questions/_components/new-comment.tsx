@@ -1,11 +1,12 @@
 'use client'
-import { useRouter } from 'next/navigation'
+
 import React from 'react'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
 import { addComment } from '@/db/mutations'
+import { RedirectType, redirect } from 'next/navigation'
 
 function CommentButton() {
   const { pending } = useFormStatus()
@@ -18,8 +19,13 @@ function CommentButton() {
 }
 
 export function NewComment(props: { questionId: number }) {
-  const router = useRouter()
   const commentRef = React.useRef<HTMLTextAreaElement>(null)
+
+  async function addCommentAction(payload: Parameters<typeof addComment>[0]) {
+    'use server'
+    await addComment(payload)
+    redirect(`/review-questions/${props.questionId}`, RedirectType.replace)
+  }
 
   return (
     <form
@@ -27,11 +33,10 @@ export function NewComment(props: { questionId: number }) {
         if (!commentRef.current) {
           return
         }
-        await addComment({
+        await addCommentAction({
           questionId: props.questionId,
           text: commentRef.current.value
         })
-        router.refresh()
         commentRef.current.value = ''
       }}
       className="w-full"

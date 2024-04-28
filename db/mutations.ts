@@ -16,7 +16,6 @@ import {
 } from '@/lib/drizzle'
 import { eq } from 'drizzle-orm'
 import { isEqual } from 'lodash'
-import { RedirectType, redirect } from 'next/navigation'
 
 const APPROVALS_REQUIRED: Record<Difficulty, number> = {
   easy: 1,
@@ -31,7 +30,6 @@ export async function createNewTag(payload: TagPayload) {
 
 export async function createNewQuestion(payload: QuestionPayload) {
   await db.insert(questions).values(payload)
-  redirect('/', RedirectType.replace)
 }
 
 type EditedQuestion = Omit<Question, 'updatedAt'>
@@ -61,15 +59,14 @@ export async function addApproval(payload: ApprovalPayload) {
     throw new Error('No question found with given id')
   }
   const { approvals: questionApprovals, ...question } = questionWithApprovals
-  const id = question.id
   if (questionApprovals.length >= APPROVALS_REQUIRED[question.difficulty]) {
     const acceptedQuestion = {
       ...question,
       status: 'accepted'
     } satisfies Question
-    await updateQuestion(acceptedQuestion, question)
-    redirect(`/question-bank/${id}`, RedirectType.replace)
+    return await updateQuestion(acceptedQuestion, question)
   }
+  return question
 }
 
 type QuestionDiff = Omit<Partial<Question>, 'id' | 'updatedAt'>
@@ -106,5 +103,11 @@ async function updateQuestion(
   await db
     .insert(questionEdits)
     .values({ ...diff, questionId: id, updatedAt: oldQuestion.updatedAt })
-  await db.update(questions).set(newQuestion).where(eq(questions.id, id))
+  return (
+    await db
+      .update(questions)
+      .set(newQuestion)
+      .where(eq(questions.id, id))
+      .returning()
+  )[0]
 }

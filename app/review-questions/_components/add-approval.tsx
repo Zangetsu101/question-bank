@@ -1,9 +1,10 @@
 'use client'
-import { useRouter } from 'next/navigation'
+
 import { Button } from '@/components/ui/button'
 import { Check, Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
 import { addApproval } from '@/db/mutations'
+import { RedirectType, redirect } from 'next/navigation'
 
 function ApproveButton() {
   const { pending } = useFormStatus()
@@ -24,15 +25,22 @@ function ApproveButton() {
 }
 
 export function AddApproval(props: { questionId: number }) {
-  const router = useRouter()
+  async function addApprovalAction(payload: Parameters<typeof addApproval>[0]) {
+    'use server'
+    const changedQuestion = await addApproval(payload)
+    if (changedQuestion.status === 'accepted') {
+      redirect(`/question-bank/${changedQuestion.id}`, RedirectType.replace)
+    } else {
+      redirect(`/review-questions/${changedQuestion.id}`, RedirectType.replace)
+    }
+  }
 
   return (
     <form
       action={async () => {
-        await addApproval({
+        await addApprovalAction({
           questionId: props.questionId
         })
-        router.refresh()
       }}
     >
       <ApproveButton />
