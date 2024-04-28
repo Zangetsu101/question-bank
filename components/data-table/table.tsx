@@ -1,7 +1,9 @@
 'use client'
 
 import {
+  ColumnDef,
   ColumnFiltersState,
+  Row,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -27,25 +29,30 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Button } from '@/components/ui/button'
-import { QuestionWithTags, Tag } from '@/db/schema'
-import { columns } from './columns'
-import { useRouter } from 'next/navigation'
+import { Tag } from '@/db/schema'
+import { cn } from '@/lib/utils'
 
-interface QuestionsTableProps {
-  questions: QuestionWithTags[]
+interface DataTableProps<TData, TValue> {
+  data: TData[]
   tags: Tag[]
+  columns: ColumnDef<TData, TValue>[]
+  onRowSelect?: (row: Row<TData>) => void
 }
 
-export function QuestionsTable({ questions, tags }: QuestionsTableProps) {
+export function DataTable<TData, TValue>({
+  data,
+  tags,
+  columns,
+  onRowSelect
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'difficulty', desc: false }
   ])
-  const router = useRouter()
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
   const table = useReactTable({
-    data: questions,
+    data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
@@ -124,12 +131,8 @@ export function QuestionsTable({ questions, tags }: QuestionsTableProps) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className="cursor-pointer"
-                  onClick={() =>
-                    row.original.status === 'in-review'
-                      ? router.push(`edit-question/${row.original.id}`)
-                      : router.push(`question-bank/${row.original.id}`)
-                  }
+                  className={cn(onRowSelect && 'cursor-pointer')}
+                  onClick={() => onRowSelect?.(row)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
