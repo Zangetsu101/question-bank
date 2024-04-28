@@ -4,7 +4,7 @@ import React from 'react'
 import { QuestionWithTags, Tag } from '@/db/schema'
 import { columns } from './columns'
 import { useRouter } from 'next/navigation'
-import { DataTable } from '@/components/data-table/table'
+import { DataTable } from '@/components/ui/data-table'
 
 export function InReviewQuestionsTable({
   questions,
