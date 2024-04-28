@@ -1,5 +1,5 @@
 import { QuestionWithTags, db } from '@/lib/drizzle'
-import { QuestionsTable } from './_components/questions-table'
+import { AcceptedQuestionsTable } from './_components/accepted-questions-table'
 
 export const dynamic = 'force-dynamic'
 
@@ -16,5 +16,5 @@ export default async function Page() {
       tags: (tagIds ?? []).map((id) => tags.find((tag) => tag.id === id)!)
     })
   )
-  return <QuestionsTable questions={questionsWithTags} tags={tags} />
+  return <AcceptedQuestionsTable questions={questionsWithTags} tags={tags} />
 }
