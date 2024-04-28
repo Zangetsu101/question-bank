@@ -126,7 +126,9 @@ export function QuestionsTable({ questions, tags }: QuestionsTableProps) {
                   data-state={row.getIsSelected() && 'selected'}
                   className="cursor-pointer"
                   onClick={() =>
-                    router.push(`edit-question/${row.original.id}`)
+                    row.original.status === 'in-review'
+                      ? router.push(`edit-question/${row.original.id}`)
+                      : router.push(`question-bank/${row.original.id}`)
                   }
                 >
                   {row.getVisibleCells().map((cell) => (
