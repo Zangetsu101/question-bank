@@ -89,6 +89,7 @@ export const approvalsRelations = relations(approvals, ({ one }) => ({
 }))
 
 export type Tag = typeof tags.$inferSelect
+export type TagPayload = typeof tags.$inferInsert
 export type Difficulty = (typeof difficultyEnum.enumValues)[number]
 export type Status = (typeof statusEnum.enumValues)[number]
 export type Question = typeof questions.$inferSelect

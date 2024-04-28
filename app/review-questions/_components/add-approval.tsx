@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Check, Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
-import { addApproval } from '@/app/actions'
+import { addApproval } from '@/db/mutations'
 
 function ApproveButton() {
   const { pending } = useFormStatus()

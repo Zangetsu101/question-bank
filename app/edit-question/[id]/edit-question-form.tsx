@@ -19,7 +19,7 @@ import {
   difficultyEnum
 } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
-import { updateQuestion, createNewTag } from '@/app/actions'
+import { updateQuestion, createNewTag } from '@/db/mutations'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
@@ -43,7 +43,7 @@ function Tags(props: {
     startTransition(() => {
       addNewTag(label)
     })
-    const newTag = await createNewTag(label)
+    const newTag = await createNewTag({ label })
     props.onSelectTag(newTag.id)
   }
   return (

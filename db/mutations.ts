@@ -5,6 +5,7 @@ import {
   CommentPayload,
   Difficulty,
   QuestionPayload,
+  TagPayload,
   approvals,
   comments,
   db,
@@ -21,8 +22,8 @@ const APPROVALS_REQUIRED: Record<Difficulty, number> = {
   hard: 2
 }
 
-export async function createNewTag(label: string) {
-  const newTag = await db.insert(tags).values({ label }).returning()
+export async function createNewTag(payload: TagPayload) {
+  const newTag = await db.insert(tags).values(payload).returning()
   return newTag[0]
 }
 

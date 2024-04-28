@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
-import { addComment } from '@/app/actions'
+import { addComment } from '@/db/mutations'
 
 function CommentButton() {
   const { pending } = useFormStatus()
