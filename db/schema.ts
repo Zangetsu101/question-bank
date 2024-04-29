@@ -17,7 +17,7 @@ export const questions = pgTable('questions', {
   difficulty: difficultyEnum('difficulty').notNull(),
   status: statusEnum('status').notNull(),
   questionMd: text('question_md').notNull(),
-  tagIds: integer('tag_ids').array().notNull().default([]),
+  tagIds: integer('tag_ids').array().notNull(),
   updatedAt: timestamp('updated_at')
     .notNull()
     .defaultNow()
