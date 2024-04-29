@@ -5,8 +5,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
-import { addComment } from '@/db/mutations'
-import { RedirectType, redirect } from 'next/navigation'
+import { addCommentAction } from './actions'
 
 function CommentButton() {
   const { pending } = useFormStatus()
@@ -20,12 +19,6 @@ function CommentButton() {
 
 export function NewComment(props: { questionId: number }) {
   const commentRef = React.useRef<HTMLTextAreaElement>(null)
-
-  async function addCommentAction(payload: Parameters<typeof addComment>[0]) {
-    'use server'
-    await addComment(payload)
-    redirect(`/review-questions/${props.questionId}`, RedirectType.replace)
-  }
 
   return (
     <form

@@ -13,11 +13,11 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Difficulty, QuestionPayload, Tag, difficultyEnum } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
-import { createNewQuestion, createNewTag } from '@/db/mutations'
+import { createNewTag } from '@/db/mutations'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
-import { RedirectType, redirect } from 'next/navigation'
+import { createNewQuestionAction } from './actions'
 
 function Tags(props: {
   selectedTags: number[]
@@ -87,14 +87,6 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
   )
   const questionRef = React.useRef<HTMLTextAreaElement>(null)
   const titleRef = React.useRef<HTMLInputElement>(null)
-
-  async function createNewQuestionAction(
-    payload: Parameters<typeof createNewQuestion>[0]
-  ) {
-    'use server'
-    await createNewQuestion(payload)
-    redirect('/', RedirectType.replace)
-  }
 
   return (
     <form

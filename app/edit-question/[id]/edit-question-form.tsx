@@ -13,12 +13,13 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Difficulty, Question, Tag, difficultyEnum } from '@/lib/drizzle'
 import React, { startTransition } from 'react'
-import { editQuestion, createNewTag } from '@/db/mutations'
+import { createNewTag } from '@/db/mutations'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
 import { isEqual } from 'lodash'
 import { useRouter } from 'next/navigation'
+import { editQuestionAction } from './actions'
 
 function Tags(props: {
   selectedTags: number[]
@@ -114,7 +115,7 @@ export function EditQuestionForm(props: { question: Question; tags: Tag[] }) {
   return (
     <form
       action={async () => {
-        await editQuestion({
+        await editQuestionAction({
           id: props.question.id,
           difficulty,
           title,
