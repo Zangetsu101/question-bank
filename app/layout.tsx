@@ -27,7 +27,7 @@ export default function RootLayout({
         >
           <main className="flex min-h-screen flex-col">
             <Navigation />
-            <div className="flex-1 py-8">{children}</div>
+            <div className="flex-1 py-6">{children}</div>
           </main>
         </ThemeProvider>
       </body>
