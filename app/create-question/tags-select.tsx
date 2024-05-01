@@ -1,4 +1,5 @@
 'use client'
+
 import { Badge } from '@/components/ui/badge'
 import { TagComboboxPopover } from '@/components/ui/combobox'
 import { Label } from '@/components/ui/label'
@@ -16,7 +17,7 @@ export function Tags(props: {
     string
   >(props.tags, (state, newTag) => [
     ...state,
-    { id: props.tags.length + 100, label: newTag, isPending: true }
+    { id: Date.now(), label: newTag, isPending: true }
   ])
   async function handleNewTag(label: string) {
     startTransition(() => {
