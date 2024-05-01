@@ -21,7 +21,6 @@ export const columns: ColumnDef<QuestionWithTags>[] = [
       return (
         <Button
           variant="ghost"
-          className="pl-0"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
           Difficulty
@@ -30,7 +29,7 @@ export const columns: ColumnDef<QuestionWithTags>[] = [
       )
     },
     cell: ({ row }) => (
-      <span className="capitalize">{row.original.difficulty}</span>
+      <span className="pl-4 capitalize">{row.original.difficulty}</span>
     )
   },
   {
