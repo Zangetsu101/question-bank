@@ -2,11 +2,12 @@
 
 import {
   ColumnDef,
-  ColumnFiltersState,
   Row,
   SortingState,
   flexRender,
   getCoreRowModel,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable
@@ -22,15 +23,9 @@ import {
 } from '@/components/ui/table'
 import React from 'react'
 
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
 import { Tag } from '@/db/schema'
 import { cn } from '@/lib/utils'
+import { DataTableFacetedFilter } from './data-table-faceted-filter'
 
 interface DataTableProps<TData, TValue> {
   data: TData[]
@@ -48,63 +43,36 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([
     { id: 'difficulty', desc: false }
   ])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
     state: {
-      sorting,
-      columnFilters
+      sorting
     }
   })
 
+  const tagsColumn = table.getColumn('tags')
+
   return (
     <div>
-      <div className="flex items-center py-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Filter tags
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {tags.map((tag) => {
-              const tagsFilter = (columnFilters.find((f) => f.id === 'tags')
-                ?.value ?? []) as number[]
-              return (
-                <DropdownMenuCheckboxItem
-                  key={tag.id}
-                  className="capitalize"
-                  checked={tagsFilter.includes(tag.id)}
-                  onCheckedChange={(value) =>
-                    value
-                      ? setColumnFilters([
-                          ...columnFilters.filter((f) => f.id !== 'tags'),
-                          { id: 'tags', value: [...tagsFilter, tag.id] }
-                        ])
-                      : setColumnFilters([
-                          ...columnFilters.filter((f) => f.id !== 'tags'),
-                          {
-                            id: 'tags',
-                            value: tagsFilter.filter((id) => id !== tag.id)
-                          }
-                        ])
-                  }
-                >
-                  {tag.label}
-                </DropdownMenuCheckboxItem>
-              )
-            })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      {tagsColumn && (
+        <div className="flex items-center gap-4 py-4">
+          Filter:
+          <DataTableFacetedFilter
+            column={tagsColumn}
+            title="Tags"
+            options={tags
+              .filter((tag) => tagsColumn.getFacetedUniqueValues().has(tag.id))
+              .map(({ id, label }) => ({ value: id.toString(), label }))}
+          />
+        </div>
+      )}
       <div className="rounded-md border">
         <Table>
           <TableHeader>

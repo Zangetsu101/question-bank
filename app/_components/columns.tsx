@@ -44,10 +44,13 @@ export const columns: ColumnDef<QuestionWithTags>[] = [
   {
     accessorKey: 'tags',
     header: 'Tags',
-    filterFn: (row, _, filterValue: number[]) => {
+    getUniqueValues: (row) => row.tags.map(({ id }) => id),
+    filterFn: (row, _, filterValue: string[]) => {
       return (
         (filterValue.length === 0 ||
-          row.original.tags?.some((tag) => filterValue.includes(tag.id))) ??
+          row.original.tags?.some((tag) =>
+            filterValue.includes(tag.id.toString())
+          )) ??
         false
       )
     },
