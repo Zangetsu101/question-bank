@@ -27,9 +27,7 @@ export default function RootLayout({
         >
           <main className="flex min-h-screen flex-col">
             <Navigation />
-            <div className="w-full max-w-4xl flex-1 self-center py-12">
-              {children}
-            </div>
+            <div className="flex-1 py-8">{children}</div>
           </main>
         </ThemeProvider>
       </body>

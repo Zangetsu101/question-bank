@@ -14,5 +14,9 @@ export default async function Page() {
       tags: (tagIds ?? []).map((id) => tags.find((tag) => tag.id === id)!)
     })
   )
-  return <MyQuestionsTable questions={questionsWithTags} tags={tags} />
+  return (
+    <div className="mx-auto max-w-4xl">
+      <MyQuestionsTable questions={questionsWithTags} tags={tags} />
+    </div>
+  )
 }
