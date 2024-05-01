@@ -22,12 +22,11 @@ export function TagComboboxPopover(props: {
   onSelect: (tagId: number) => void
   addNewTag: (label: string) => void
 }) {
-  const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState('')
 
   return (
     <div className="flex items-center space-x-4">
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
