@@ -8,7 +8,7 @@ export async function addApprovalAction(
 ) {
   const changedQuestion = await addApproval(payload)
   if (changedQuestion.status === 'accepted') {
-    redirect(`/question-bank/${changedQuestion.id}`, RedirectType.replace)
+    redirect('/review-questions', RedirectType.replace)
   } else {
     redirect(`/review-questions/${changedQuestion.id}`, RedirectType.replace)
   }
