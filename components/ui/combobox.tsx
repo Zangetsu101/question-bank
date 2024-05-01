@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/popover'
 import { Tag } from '@/lib/drizzle'
 import { cn } from '@/lib/utils'
-import { CheckIcon, Loader2 } from 'lucide-react'
+import { CheckIcon, Loader2, PlusCircleIcon } from 'lucide-react'
 
 export function TagComboboxPopover(props: {
   tags: (Tag & { isPending?: boolean })[]
@@ -36,7 +36,8 @@ export function TagComboboxPopover(props: {
             size="sm"
             className="h-10 w-60 justify-start"
           >
-            + Tag
+            <PlusCircleIcon className="mr-2 h-4 w-4" />
+            Tag
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0" side="right" align="start">
