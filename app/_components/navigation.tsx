@@ -29,7 +29,9 @@ export function Navigation() {
           <Link {...getLinkProps('/')}>My questions</Link>
           <Link {...getLinkProps('/create-question')}>Create question </Link>
           <Link {...getLinkProps('/review-questions')}>Review questions</Link>
-          <Link {...getLinkProps('/question-bank')}>Question bank</Link>
+          <Link {...getLinkProps('/accepted-questions')}>
+            Accepted questions
+          </Link>
         </nav>
       </div>
       <div className="flex w-44 flex-initial justify-end gap-2">

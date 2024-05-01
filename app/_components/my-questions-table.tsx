@@ -21,7 +21,7 @@ export function MyQuestionsTable({
       onRowSelect={(row) =>
         row.original.status === 'in-review'
           ? router.push(`edit-question/${row.original.id}`)
-          : router.push(`question-bank/${row.original.id}`)
+          : router.push(`accepted-questions/${row.original.id}`)
       }
     />
   )

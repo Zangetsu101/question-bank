@@ -20,7 +20,9 @@ export function AcceptedQuestionsTable({
       data={questions}
       tags={tags}
       columns={columns}
-      onRowSelect={(row) => router.push(`question-bank/${row.original.id}`)}
+      onRowSelect={(row) =>
+        router.push(`accepted-questions/${row.original.id}`)
+      }
     />
   )
 }
