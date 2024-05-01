@@ -29,7 +29,7 @@ export function Tags(props: {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center">
-        <Label htmlFor="tags" className="mr-2">
+        <Label htmlFor="tags" className="mr-2 py-1">
           Tags:
         </Label>
         {tags
