@@ -34,7 +34,11 @@ function SubmitButton(props: { disabled: boolean }) {
   )
 }
 
-export function EditQuestionForm(props: { question: Question; tags: Tag[] }) {
+export function EditQuestionForm(props: {
+  question: Question
+  tags: Tag[]
+  className?: string
+}) {
   const router = useRouter()
   const [selectedTags, setSelectedTags] = React.useState<number[]>(
     props.question.tagIds ?? []
@@ -62,6 +66,7 @@ export function EditQuestionForm(props: { question: Question; tags: Tag[] }) {
 
   return (
     <form
+      className={props.className}
       action={async () => {
         await editQuestionAction({
           id: props.question.id,
@@ -73,7 +78,6 @@ export function EditQuestionForm(props: { question: Question; tags: Tag[] }) {
         })
         router.refresh()
       }}
-      className="w-full"
     >
       <div className="flex flex-col gap-2">
         <div className="flex justify-between gap-4">
