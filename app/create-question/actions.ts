@@ -1,6 +1,7 @@
 'use server'
 
-import { createNewQuestion } from '@/db/mutations'
+import { createNewQuestion, createNewTag } from '@/db/mutations'
+import { revalidatePath } from 'next/cache'
 import { RedirectType, redirect } from 'next/navigation'
 
 export async function createNewQuestionAction(
@@ -8,4 +9,12 @@ export async function createNewQuestionAction(
 ) {
   await createNewQuestion(payload)
   redirect('/', RedirectType.replace)
+}
+
+export async function createNewTagAction(
+  payload: Parameters<typeof createNewTag>[0]
+) {
+  const newTag = await createNewTag(payload)
+  revalidatePath('/create-question')
+  return newTag
 }

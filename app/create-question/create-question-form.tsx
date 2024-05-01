@@ -1,7 +1,6 @@
 'use client'
-import { Badge } from '@/components/ui/badge'
+
 import { Button } from '@/components/ui/button'
-import { TagComboboxPopover } from '@/components/ui/combobox'
 import { Label } from '@/components/ui/label'
 import {
   Select,
@@ -12,63 +11,12 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { Difficulty, QuestionPayload, Tag, difficultyEnum } from '@/lib/drizzle'
-import React, { startTransition } from 'react'
-import { createNewTag } from '@/db/mutations'
+import React from 'react'
 import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
 import { createNewQuestionAction } from './actions'
-
-function Tags(props: {
-  selectedTags: number[]
-  tags: Tag[]
-  onSelectTag: (tagId: number) => void
-  onDeselectTag: (tagId: number) => void
-}) {
-  const [selectedTags, addNewTag] = React.useOptimistic<
-    (Omit<Tag, 'id'> & { id?: number })[],
-    string
-  >(
-    props.tags.filter((tag) => props.selectedTags.includes(tag.id)),
-    (state, newTag) => [...state, { label: newTag }]
-  )
-  async function handleNewTag(label: string) {
-    startTransition(() => {
-      addNewTag(label)
-    })
-    const newTag = await createNewTag({ label })
-    props.onSelectTag(newTag.id)
-  }
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex items-center">
-        <Label htmlFor="tags" className="mr-2">
-          Tags:
-        </Label>
-        {selectedTags.map(({ id, label }) =>
-          id ? (
-            <Badge
-              key={id}
-              className="cursor-pointer"
-              onClick={() => props.onDeselectTag(id)}
-            >
-              {label}
-            </Badge>
-          ) : (
-            <Badge variant="secondary" key={label}>
-              {label}
-            </Badge>
-          )
-        )}
-      </div>
-      <TagComboboxPopover
-        tags={props.tags}
-        onSelect={props.onSelectTag}
-        addNewTag={handleNewTag}
-      />
-    </div>
-  )
-}
+import { Tags } from './tags-select'
 
 function SubmitButton() {
   const { pending } = useFormStatus()
@@ -126,16 +74,17 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
             <Tags
               selectedTags={selectedTags}
               tags={props.tags}
-              onSelectTag={(tagId) =>
-                setSelectedTags((prevTags) =>
-                  Array.from(new Set([...prevTags, tagId]))
-                )
-              }
-              onDeselectTag={(tagId) =>
-                setSelectedTags((prevTags) =>
-                  prevTags.filter((id) => id !== tagId)
-                )
-              }
+              onSelect={(tagId) => {
+                if (selectedTags.includes(tagId)) {
+                  setSelectedTags((prevTags) =>
+                    prevTags.filter((id) => id !== tagId)
+                  )
+                } else {
+                  setSelectedTags((prevTags) =>
+                    Array.from([...prevTags, tagId])
+                  )
+                }
+              }}
             />
           </div>
         </div>
