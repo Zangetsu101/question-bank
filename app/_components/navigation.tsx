@@ -6,6 +6,7 @@ import React from 'react'
 import { ModeToggle } from './theme-toggle'
 import { Book } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Separator } from '@/components/ui/separator'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -25,10 +26,13 @@ export function Navigation() {
         <span className="text-lg">Question Bank</span>
       </div>
       <div className="flex items-center justify-center">
-        <nav className="flex gap-2">
+        <nav className="flex gap-1.5">
           <Link {...getLinkProps('/')}>My questions</Link>
+          <Separator orientation="vertical" className="h-5" />
           <Link {...getLinkProps('/create-question')}>Create question </Link>
+          <Separator orientation="vertical" className="h-5" />
           <Link {...getLinkProps('/review-questions')}>Review questions</Link>
+          <Separator orientation="vertical" className="h-5" />
           <Link {...getLinkProps('/accepted-questions')}>
             Accepted questions
           </Link>
