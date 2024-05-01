@@ -90,7 +90,11 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="title">Title: </Label>
-          <Input ref={titleRef} id="title" />
+          <Input
+            ref={titleRef}
+            id="title"
+            placeholder="Title of the question"
+          />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="question">Question: </Label>
@@ -98,6 +102,7 @@ export function CreateQuestionForm(props: { tags: Tag[] }) {
             ref={questionRef}
             id="question"
             className="min-h-[600px] resize-none"
+            placeholder="The question in markdown"
           />
         </div>
         <SubmitButton />
