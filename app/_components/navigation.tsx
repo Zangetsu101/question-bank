@@ -21,11 +21,11 @@ export function Navigation() {
 
   return (
     <div className="flex items-center justify-between gap-2 border-b px-2 py-1">
-      <div className="flex w-44 flex-initial items-center gap-2">
+      <div className="flex shrink-0 basis-[164px] items-center gap-2">
         <Book className="h-8 w-8" />
         <span className="text-lg">Question Bank</span>
       </div>
-      <div className="flex items-center justify-center">
+      <div className="flex shrink-0 items-center justify-center">
         <nav className="flex gap-1.5">
           <Link {...getLinkProps('/')}>My questions</Link>
           <Separator orientation="vertical" className="h-5" />
@@ -38,7 +38,7 @@ export function Navigation() {
           </Link>
         </nav>
       </div>
-      <div className="flex w-44 flex-initial justify-end gap-2">
+      <div className="flex basis-[164px] justify-end gap-2">
         <ModeToggle />
         <Avatar>
           <AvatarFallback>U</AvatarFallback>
