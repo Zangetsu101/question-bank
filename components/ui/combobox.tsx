@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button'
 import {
   Command,
   CommandInput,
-  CommandEmpty,
   CommandGroup,
   CommandItem,
   CommandList
@@ -48,21 +47,6 @@ export function TagComboboxPopover(props: {
               placeholder="Add tag..."
             />
             <CommandList>
-              <CommandEmpty>
-                {value ? (
-                  <span
-                    className="cursor-pointer"
-                    onClick={() => {
-                      props.addNewTag(value)
-                      setValue('')
-                    }}
-                  >
-                    Add &quot;{value}&quot; to tags
-                  </span>
-                ) : (
-                  'No tags found'
-                )}
-              </CommandEmpty>
               <CommandGroup>
                 {props.tags.map((tag) => {
                   const isSelected = props.selectedTags.includes(tag.id)
@@ -94,6 +78,19 @@ export function TagComboboxPopover(props: {
                   )
                 })}
               </CommandGroup>
+              {value && (
+                <CommandGroup>
+                  <CommandItem
+                    value={`create:${value}:`}
+                    onSelect={() => {
+                      props.addNewTag(value)
+                      setValue('')
+                    }}
+                  >
+                    Add &quot;{value}&quot; to tags
+                  </CommandItem>
+                </CommandGroup>
+              )}
             </CommandList>
           </Command>
         </PopoverContent>
