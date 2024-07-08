@@ -7,7 +7,8 @@
 This app uses vercel postgres so you need add a postgres storage to the vercel project.
 
 5. use `bun vercel env pull .env.development.local` to pull the environment variables for local development
-6. finally run `bun dev` to start the local development server
+6. run `bun db:push` to sync the local `db/schema` with your remote db
+7. finally run `bun dev` to start the local development server
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
