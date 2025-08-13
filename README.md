@@ -13,7 +13,7 @@ This app uses vercel postgres so you need add a postgres storage to the vercel p
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Question Bank
-This is platform where the user can submit questions which goes through an approval process before getting added to the question bank
+This is a platform where the user can submit questions which goes through an approval process before getting added to the question bank
 ## Features
 Questions have 2 statuses, _in-review_ & _accepted_. When the user first submits a question it gets _in-review_ status. When the question gets approved then it receives an _accepted_ status.
 - __Create questions__: User's are able to submit their questions. Each question requires has the following fields:
